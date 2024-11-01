@@ -4,6 +4,16 @@ import Books from './components/Books';
 import NewBook from './components/NewBook';
 import { Routes, Route, Link } from 'react-router-dom';
 const App = () => {
+  const [token, setToken] = useState(null);
+  if (!token) {
+    return (
+      <div>
+        <Notify errorMessage={errorMessage} />
+        <h2>Login</h2>
+        <LoginForm setToken={setToken} setError={notify} />
+      </div>
+    );
+  }
   return (
     <div>
       <div>
