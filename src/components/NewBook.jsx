@@ -10,7 +10,7 @@ const NewBook = () => {
   const [genre, setGenre] = useState('');
   const [genres, setGenres] = useState([]);
   const [addBook, { data, loading, error, reset }] = useMutation(ADD_BOOK, {
-    refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }],
+    refetchQueries: [ALL_AUTHORS, ALL_BOOKS],
   });
   if (loading) return <div>Submitting...</div>;
   if (error)

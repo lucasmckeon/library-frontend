@@ -29,7 +29,7 @@ const SetBirthYear = ({ updateAuthor, authors }) => {
 const Authors = () => {
   const result = useQuery(ALL_AUTHORS);
   const [updateBirthYear, { data }] = useMutation(EDIT_AUTHOR, {
-    refetchQueries: [{ query: ALL_AUTHORS }],
+    refetchQueries: [ALL_AUTHORS],
   });
   if (result.loading) return <div>Loading...</div>;
   const authors = [...result.data.allAuthors];

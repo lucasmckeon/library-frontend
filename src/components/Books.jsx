@@ -1,32 +1,36 @@
-import { useQuery } from '@apollo/client';
-import { ALL_BOOKS } from '../graphql/queries.js';
+import { useState } from 'react';
+import { GENRES } from './Books.constants.js';
+import { BooksTable } from './BooksTable.jsx';
+import { useAllBooks } from './useAllBooks.js';
 
 const Books = () => {
-  const result = useQuery(ALL_BOOKS);
-  if (result.loading) return <div>Loading...</div>;
-  if (result.error) return <div>Error: {result.error.message}</div>;
-  const books = result.data.allBooks;
+  const [genre, setGenre] = useState(GENRES.ALL_GENRES);
+  const { loading, error, data } = useAllBooks(genre);
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  const books = data.allBooks;
   console.log('books', books);
   return (
     <div>
       <h2>books</h2>
-
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>author</th>
-            <th>published</th>
-          </tr>
-          {books.map((a) => (
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author.name}</td>
-              <td>{a.published}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <BooksTable books={books} />
+      <div>
+        <button onClick={() => setGenre(GENRES.REFACTORING)}>
+          {GENRES.REFACTORING}
+        </button>
+        <button onClick={() => setGenre(GENRES.AGILE)}>{GENRES.AGILE}</button>
+        <button onClick={() => setGenre(GENRES.PATTERNS)}>
+          {GENRES.PATTERNS}
+        </button>
+        <button onClick={() => setGenre(GENRES.DESIGN)}>{GENRES.DESIGN}</button>
+        <button onClick={() => setGenre(GENRES.CRIME)}>{GENRES.CRIME}</button>
+        <button onClick={() => setGenre(GENRES.CLASSIC)}>
+          {GENRES.CLASSIC}
+        </button>
+        <button onClick={() => setGenre(GENRES.ALL_GENRES)}>
+          {GENRES.ALL_GENRES}
+        </button>
+      </div>
     </div>
   );
 };
