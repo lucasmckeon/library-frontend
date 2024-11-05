@@ -6,11 +6,23 @@ import { LoginForm } from './components/LoginForm.jsx';
 import { Recommend } from './components/Recommend.jsx';
 import { Notify } from './components/Notify.jsx';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { useSubscription } from '@apollo/client';
+import { BOOK_ADDED } from './graphql/subscriptions.js';
+import { ALL_BOOKS } from './graphql/queries.js';
+import { updateAllBooksCache } from './utils.js';
 const App = () => {
   const [token, setToken] = useState(() =>
     localStorage.getItem('library-user-token')
   );
   const [errorMessage, setErrorMessage] = useState('');
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data, client }) => {
+      console.log(data);
+      const addedBook = data.data.bookAdded;
+      notify(`${addedBook.title} added`);
+      updateAllBooksCache(client.cache, { query: ALL_BOOKS }, addedBook);
+    },
+  });
   const navigate = useNavigate();
   const notify = (message) => {
     setErrorMessage(message);
